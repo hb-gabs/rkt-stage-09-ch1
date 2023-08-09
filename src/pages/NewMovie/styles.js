@@ -20,6 +20,7 @@ export const StyledMarkersWrapper = styled.div`
     padding: 1rem;
     border-radius: 1rem;
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
 `; 
 

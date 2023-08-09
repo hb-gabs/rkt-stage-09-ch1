@@ -1,77 +1,113 @@
-import { StyledCreationTime, StyledCreator, StyledDescription, StyledImage, StyledMovieTitle, StyledMovieView, StyledTagsWrapper, StyledWrapper } from "./styles";
+import { StyledActionsWrapper, StyledCreationTime, StyledCreator, StyledDescription, StyledImage, StyledMovieTitle, StyledMovieView, StyledTagsWrapper, StyledWrapper } from "./styles";
 import { Button, Header, Stars, Tag } from '../../components/index';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { CiClock2 } from 'react-icons/ci';
 import profileImg from '../../assets/user-img.svg';
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getOneMovie } from "../../services/movies/get-one-movie";
+import { useAuth } from "../../hooks";
+import { api } from "../../services/api";
+import placeholderImg from '../../assets/avatar_placeholder.svg';
+import { BsFillTrashFill } from 'react-icons/bs';
+import { deleteMovie } from "../../services/movies/delete-movie";
 
-const mocked = {
-  title: 'Interestelar',
-  description: 'Pragas nas colheitas fizeram a civilização humana regredir para uma sociedade agrária em futuro de data desconhecida. Cooper, ex-piloto da NASA, tem uma fazenda com sua família. Murphy, a filha de dez anos de Cooper, acredita que seu quarto está assombrado por um fantasma que tenta se comunicar com ela. Pai e filha descobrem que o "fantasma" é uma inteligência desconhecida que está enviando mensagens codificadas através de radiação gravitacional, deixando coordenadas em binário que os levam até uma instalação secreta da NASA liderada pelo professor John Brand. O cientista revela que um buraco de minhoca foi aberto perto de Saturno e que ele leva a planetas que podem oferecer condições de sobrevivência para a espécie humana. As "missões Lázaro" enviadas anos antes identificaram três planetas potencialmente habitáveis orbitando o buraco negro Gargântua: Miller, Edmunds e Mann – nomeados em homenagem aos astronautas que os pesquisaram. Brand recruta Cooper para pilotar a nave espacial Endurance e recuperar os dados dos astronautas; se um dos planetas se mostrar habitável, a humanidade irá seguir para ele na instalação da NASA, que é na realidade uma enorme estação espacial. A partida de Cooper devasta Murphy.',
-  creator: 'Rodrigo Gonçalves',
-  dateTime: '23/05/23 às 08h00',
-  tags: [
-      {
-          id: 0,
-          name: 'Ficção científica',
-      },
-      {
-          id: 1,
-          name: 'Drama',
-      },
-      {
-          id: 2,
-          name: 'Familia',
-      },
-  ],
-};
+export const MovieView = () => {
+  const { id } = useParams();
+  const [movieData, setMoviesData] = useState();
+  const navigate = useNavigate();
 
-export const MovieView = ({
-  data = mocked,
-}) => {
+  const avatar = movieData?.avatar
+  ? `${api.defaults.baseURL}/files/${movieData?.avatar}`
+  : placeholderImg;
+
+  const getMovieData = async () => {
+    const { data } = await getOneMovie({ id });
+    
+    if (!data) return;
+
+    setMoviesData(data);
+  }
+
+  const handleDelete = async () => {
+    const confirm = window.confirm('Deseja excluir esse filme?');
+
+    if (!confirm) return;
+
+    const response = await deleteMovie({ id });
+    if (response) {
+      alert('Filme deletado com sucesso!');
+      navigate('/');
+    }
+  }
+
+  useEffect(() => {
+    getMovieData();
+  }, [])
+
   return (
     <>
       <Header />
       <StyledMovieView>
+        <StyledActionsWrapper>
           <Button
             text="Voltar"
             icon={AiOutlineArrowLeft}
             noBackground
-            isLink
-            to="/"
+            onClick={() => navigate(-1)}
           />
 
+          <Button
+            text="Excluir filme"
+            icon={BsFillTrashFill}
+            invert
+            onClick={handleDelete}
+          />
+        </StyledActionsWrapper>
+
+        {!movieData && (
+          <p>Filme não encontrado...</p>
+        )}
+
+        {movieData && (
+          <>
           <StyledWrapper>
             <StyledMovieTitle>
-              {data.title}
+              {movieData.title}
             </StyledMovieTitle>
             <Stars
-              rating={4}
+              rating={movieData.rating}
               className="rating-stars"
             />
           </StyledWrapper>
 
           <StyledWrapper>
             <StyledImage
-              src={profileImg}
+              src={avatar}
             />
             <StyledCreator>
-              Por {data.creator}
+              Por {movieData.creator}
             </StyledCreator>
             <CiClock2 className="clock-icon" />
             <StyledCreationTime>
-              {data.dateTime}
+              {movieData.created_at}
             </StyledCreationTime>
           </StyledWrapper>
 
-            <StyledTagsWrapper>
-              {data.tags?.map(tag => (
-                <Tag name={tag.name} />
-              ))}
-            </StyledTagsWrapper>
+          <StyledTagsWrapper>
+            {movieData.tags.length !== 0 && movieData.tags?.map(tag => (
+              <Tag name={tag.name} />
+            ))}
+            {movieData.tags.length === 0 && (
+              <p>Não há Tags registradas.</p>
+            )}
+          </StyledTagsWrapper>
 
-            <StyledDescription>
-              {data.description}
-            </StyledDescription>
+          <StyledDescription>
+            {movieData.description}
+          </StyledDescription>
+          </>
+        )}
       </StyledMovieView>
     </>
   );

@@ -2,11 +2,25 @@ import { Button, Input } from "../../components"
 import { StyledContent, StyledSignin, StyledBackground, StyledFormWrapper } from "./styles"
 import { AiOutlineMail, AiFillLock } from "react-icons/ai";
 import backgroundSign from '../../assets/background.svg';
+import { useAuth } from "../../hooks/auth/auth";
+import { useFields } from "../../hooks/useFields/useFields";
 
 export const Signin = () => {
 
-  const handleSignin = e => {
+  const { signin } = useAuth();
+  const { fields, setNewFieldsFunction, checkFields } = useFields();
+
+  const handleSignin = async e => {
     e.preventDefault();
+
+    if (!checkFields()) {
+      alert('Preencha os campos corretamente!');
+      return;
+    }
+
+    await signin({
+      data: fields,
+    });
   }
 
   return(
@@ -21,11 +35,15 @@ export const Signin = () => {
               placeholder="Email"
               type="text"
               icon={AiOutlineMail}
+              value={fields.email}
+              onChange={setNewFieldsFunction('email')}
             />
             <Input
               placeholder="Senha"
               type="password"
               icon={AiFillLock}
+              value={fields.password}
+              onChange={setNewFieldsFunction('password')}
             />
             <Button
               className="btn"

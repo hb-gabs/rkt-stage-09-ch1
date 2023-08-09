@@ -5,6 +5,8 @@ export const Input = ({
     type = 'text',
     placeholder = 'Digite algo',
     icon: Icon,
+    onChange = () => {},
+    value = "",
     ...rest
 }) => {
     return (
@@ -13,6 +15,8 @@ export const Input = ({
             <StyledInput 
                 type={type}
                 placeholder={placeholder}
+                onChange={onChange}
+                value={value}
             />
         </StyledInputContainer>
     );

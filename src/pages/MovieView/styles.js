@@ -8,6 +8,15 @@ export const StyledMovieView = styled.div`
     gap: 1rem;
     height: calc(100vh - 150px);
     overflow-y: auto;
+
+    > p {
+        color: grey;
+    }
+`;
+
+export const StyledActionsWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
 `;
 
 export const StyledWrapper = styled.div`
@@ -43,6 +52,10 @@ export const StyledCreationTime = styled.p`
 export const StyledTagsWrapper = styled.div`
     display: flex;
     gap: 1rem;
+
+    > p {
+        color: grey;
+    }
 `;
 
 export const StyledDescription = styled.p`
@@ -54,4 +67,6 @@ export const StyledImage = styled.img`
     border: 1px solid white;
     border-radius: 50%;
     width: 1.4rem;
+    height: 1.4rem;
+    object-fit: cover;
 `;

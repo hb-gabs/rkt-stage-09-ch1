@@ -3,12 +3,31 @@ import { StyledContent, StyledSignup, StyledBackground, StyledFormWrapper } from
 import { AiOutlineMail, AiFillLock } from "react-icons/ai";
 import backgroundSign from '../../assets/background.svg';
 import { CgProfile } from 'react-icons/cg';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { signup } from "../../services/user/signup";
+import { useFields } from "../../hooks/useFields/useFields";
 
 export const Signup = () => {
 
-  const handleSignin = e => {
+  const { fields, setNewFieldsFunction, checkFields } = useFields();
+  const navigate = useNavigate();
+
+  const handleSignup = async e => {
     e.preventDefault();
+
+    if (!checkFields()) {
+      alert('Preencha os campos corretamente!');
+      return;
+    }
+
+    const response = await signup({
+      data: fields,
+    });
+
+    if (response.status === 201) {
+      navigate('/');
+    }
   }
 
   return(
@@ -23,28 +42,34 @@ export const Signup = () => {
             placeholder="Nome"
             type="text"
             icon={CgProfile}
+            value={fields.name}
+            onChange={setNewFieldsFunction('name')}
           />
           <Input
             placeholder="Email"
             type="text"
             icon={AiOutlineMail}
+            value={fields.email}
+            onChange={setNewFieldsFunction('email')}
           />
           <Input
             placeholder="Senha"
             type="password"
             icon={AiFillLock}
+            value={fields.password}
+            onChange={setNewFieldsFunction('password')}
           />
           <Button
             className="btn"
             text="Cadastrar"
-            onClick={handleSignin}
+            onClick={handleSignup}
           />
           <Button
             text="Voltar para o login"
             noBackground
             className="btn"
             isLink
-            to="/signin"
+            to="/"
           />
         </form>
         </StyledFormWrapper>

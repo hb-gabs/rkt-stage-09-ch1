@@ -8,12 +8,12 @@ export const StyledContent = styled.main`
     grid-template-areas:
     "header"
     "body";
+    grid-template-rows: 60px auto;
     overflow: hidden;
 `;
     
 export const StyledContentHeader = styled.div`
     display: flex;
-    align-items: center;
     justify-content: space-between;
     grid-area: header;
 `;
@@ -27,6 +27,10 @@ export const StyledHeaderName = styled.h1`
 export const StyledContentBody = styled.div`
     overflow-y: auto;
     grid-area: body;
+
+    > p {
+        color: grey;
+    }
 
     &::-webkit-scrollbar {
         width: 10px;

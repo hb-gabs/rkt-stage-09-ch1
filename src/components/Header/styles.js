@@ -15,4 +15,5 @@ export const StyledName = styled.h1`
     font-weight: bold;
     font-size: 2rem;
     color: ${({ theme }) => theme.colors.primary};
+    cursor: pointer;
 `

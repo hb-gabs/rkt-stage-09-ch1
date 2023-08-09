@@ -33,4 +33,8 @@ export const StyledLogoutButton = styled.p`
 export const StyledUserImage = styled.img`
     border-radius: 50%;
     border: 1px solid ${({ theme }) => theme.colors.secondaryTextColor};
+    width: 4rem;
+    height: 4rem;
+    object-fit: cover;
+    cursor: pointer;
 `;

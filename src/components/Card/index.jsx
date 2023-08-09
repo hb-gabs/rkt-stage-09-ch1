@@ -34,10 +34,10 @@ export const Card = ({
                     noBackground
                     noPadding
                     style={{color: 'white'}}
-                    to="movie/view"
+                    to={`/movie/view/${data.id}`}
                 />
             </StyledMovieTitle>
-            <Stars rating={3} />
+            <Stars rating={data.rating} />
             <StyledMovieDescription>
                {data.description}
             </StyledMovieDescription>

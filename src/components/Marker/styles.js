@@ -12,7 +12,8 @@ export const StyledMarker = styled.div`
     ${({ isEmpty, theme }) => isEmpty && `
         background: ${theme.colors.mediumBackground};
         border: 2px dashed ${theme.colors.lightBackground};
-        color: ${theme.colors.lightBackground}; 
+        color: ${theme.colors.lightBackground};
+        padding: .5rem;
     `}
 `;
 

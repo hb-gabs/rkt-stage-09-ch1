@@ -59,6 +59,8 @@ export const StyledInputWrapper = styled.div`
 export const StyledImage = styled.img`
     border-radius: 50%;
     width: 12rem;
+    height: 12rem;
+    object-fit: cover;
     position: absolute;
     top: -6rem;
     z-index: 99;
